@@ -1,22 +1,29 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import "./Movie.css";
 
 class Movie extends Component {
+  static propTypes = {
+    title: PropTypes.string.isRequired,
+    poster: PropTypes.string.isRequired
+  };
   render() {
     return (
       <div>
-        <MoviePoster />
-        <h1> hello this is a movie!</h1>
+        <MoviePoster poster={this.props.poster} />
+        <h1>{this.props.title}</h1>
       </div>
     );
   }
 }
 
 class MoviePoster extends Component {
+  static propTypes = {
+    poster: PropTypes.string.isRequired
+  };
   render() {
-    return (
-      <img src="http://www.theviewers.co.kr/news/photo/201903/30002_25680_2043.jpg" />
-    );
+    return <img src={this.props.poster} />;
   }
 }
 export default Movie;
