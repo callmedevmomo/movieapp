@@ -32,23 +32,45 @@ import "./Movie.css";
 // dumb component => class가 아니기 때문에 this.props 사용 (x) *변경이 없는 Component에서 사용
 //{title, poster} are the props passed from App.js to the Movie Component.
 
-function Movie({ title, poster }) {
+function Movie({ title, poster, genres, synopsis }) {
   return (
-    <div>
-      <MoviePoster poster={poster} />
-      <h1>{title}</h1>
+    <div className="Movie">
+      <div className="Movie_Columns">
+        <MoviePoster poster={poster} alt={title} />
+      </div>
+      <div className="Movie_Columns">
+        <h1>{title}</h1>
+        <div className="Movie_Genres">
+          {genres.map((genre, index) => (
+            <MovieGenre genre={genre} key={index} />
+          ))}
+        </div>
+        <p className="Movie_Synopsis">{synopsis}</p>
+      </div>
     </div>
   );
 }
 
 Movie.propTypes = {
   title: PropTypes.string.isRequired,
-  poster: PropTypes.string.isRequired
+  poster: PropTypes.string.isRequired,
+  genres: PropTypes.array.isRequired,
+  synopsis: PropTypes.string.isRequired
 };
-
-function MoviePoster({ poster }) {
-  return <img src={poster} alt="Movie Poster" />;
+//({poster}) is taking the 'poster variable from the props.
+// function MoviePoster(props) -> props.poster
+// or
+// function MoviePoster({poster}) -> poster
+function MoviePoster({ poster, alt }) {
+  return <img src={poster} alt={alt} title={alt} className="Movie_Poster" />;
 }
-MoviePoster.propTypes = { poster: PropTypes.string.isRequired };
-
+function MovieGenre({ genre }) {
+  console.log(genre);
+  return <span className="Movie_Genre">{genre}</span>;
+}
+MoviePoster.propTypes = {
+  poster: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired
+};
+MovieGenre.propTypes = { genre: PropTypes.string.isRequired };
 export default Movie;

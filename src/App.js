@@ -8,15 +8,43 @@ class App extends Component {
   // State 변경(.setState({})) --> Render 자동 활성화
   state = {};
   componentDidMount() {
-    fetch("https://yts.am/api/v2/list_movies.json?sort_by=rating");
+    this._getMoives();
   }
 
   _renderMovies = () => {
-    const movie = this.state.movies.map((movie, index) => {
-      return <Movie title={movie.title} poster={movie.poster} key={index} />;
+    const movies = this.state.movies.map(movie => {
+      return (
+        <Movie
+          title={movie.title_english}
+          poster={movie.medium_cover_image}
+          key={movie.id}
+          genres={movie.genres}
+          synopsis={movie.synopsis}
+        />
+      );
     });
-    return movie;
+    return movies;
   };
+
+  _getMoives = async () => {
+    // .then (.then(.then....~~)) ==> CALLBACK HELL!!! ==> async await
+    const movies = await this._callApi();
+    this.setState({
+      movies
+    });
+  };
+
+  _callApi = () => {
+    return (
+      fetch("https://yts.am/api/v2/list_movies.json?sort_by=rating")
+        // modern JS &&  (Arrow Function...)
+        //ReadableStream (01010101..) => json()
+        .then(beautiful => beautiful.json())
+        .then(json => json.data.movies)
+        .catch(err => console.log(err))
+    );
+  };
+
   render() {
     return (
       // function ()
